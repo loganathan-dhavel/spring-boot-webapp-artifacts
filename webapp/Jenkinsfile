@@ -53,7 +53,7 @@ pipeline{
                 IMAGE_TAG = "${BUILD_NUMBER}"
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'github-new-token', variable: 'GIT_TOKEN')]) {
+                withCredentials([string(credentialsId: 'github-new-token', variable: 'GIT_TOKEN')]) {
                     sh '''
                         git config --global user.name "${GIT_USERNAME}"
                         git config --global user.email "${GIT_EMAIL}"
