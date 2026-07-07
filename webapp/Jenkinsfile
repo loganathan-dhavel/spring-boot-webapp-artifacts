@@ -57,8 +57,8 @@ pipeline{
                         git config --global user.name "${GIT_USERNAME}"
                         git config --global user.email "${GIT_EMAIL}"
 
-                        sed -i "s/releaseTag/${IMAGE_TAG}/g" spring-boot-webapp-artifacts/manifests/deployment.yaml
-                        git add spring-boot-webapp-artifacts/manifests/*
+                        sed -i "s/releaseTag/${IMAGE_TAG}/g" manifests/deployment.yaml
+                        git add manifests/*
                         git commit -m "Update deployment.yaml with new image tag ${IMAGE_TAG}"
                         git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${GIT_REPO_NAME} HEAD:main
                     '''
