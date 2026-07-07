@@ -34,15 +34,34 @@ pipeline{
 
         stage('Build Docker Image'){
             steps{
-                sh 'docker build -t krishloga9318/spring-boot-web-app:latest .'
+                sh 'docker build -t krishloga9318/springboot-webapp:${BUILD_NUMBER} .'
             }
         }
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
-                    sh 'docker push krishloga9318/spring-boot-web-app:latest'
+                    sh 'docker push krishloga9318/springboot-webapp:${BUILD_NUMBER}'
                 }
+            }
+        }
+        stage('Update k8s deployment files'){
+            environment {
+                IMAGE_TAG = "${BUILD_NUMBER}"
+                GIT_REPO_NAME = "springboot-webapp-deployments"
+                GIT_EMAIL = "loganathan9318@gmail.com"
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    sh '''
+                        git config --global user.name "${GIT_USERNAME}"
+                        git config --global user.email "${GIT_EMAIL}"
+
+                        sed -i "s/releaseTag/${IMAGE_TAG}/g" spring-boot-webapp-artifacts/manifests/deployment.yaml
+                        git add spring-boot-webapp-artifacts/manifests/*
+                        git commit -m "Update deployment.yaml with new image tag ${IMAGE_TAG}"
+                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${GIT_REPO_NAME} HEAD:main
+                    '''
             }
         }
     }
