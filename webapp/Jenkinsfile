@@ -1,0 +1,49 @@
+pipeline{
+    agent {
+        docker {
+            image 'krishloga9318/maven-docker-agent:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
+    stages{
+        stage('Checkout'){
+            steps{
+//                git branch: 'main',
+//                    url: 'https://github.com/loganathan-dhavel/spring-boot-web-app.git',
+//                    credentialsId: 'github-creds'
+                sh 'echo "git clone passed"'
+            }
+        }
+        stage('Build and Test'){
+            steps{
+                sh 'ls -ltr'
+                sh 'cd webapp && mvn clean package'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            environment {
+                SONAR_URL = "https://hatchet-landlady-payday.ngrok-free.dev"
+            }
+            steps {
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_TOKEN')]) {
+                    sh "cd webapp && mvn sonar:sonar -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_TOKEN}"
+                }
+            }
+        }
+
+        stage('Build Docker Image'){
+            steps{
+                sh 'docker build -t krishloga9318/spring-boot-web-app:latest .'
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                    sh 'docker push krishloga9318/spring-boot-web-app:latest'
+                }
+            }
+        }
+    }
+}

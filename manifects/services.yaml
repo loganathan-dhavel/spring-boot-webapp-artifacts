@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  springboot-webapp-service
+spec:
+  selector:
+    app:  springboot-webapp
+  type:  NodePort
+  ports:
+  - name:  http
+    port:  80
+    targetPort:  8086
+    protocal:  TCP

@@ -1,0 +1,34 @@
+# IDE and editor files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Build outputs
+**/target/
+**/build/
+
+# Maven wrapper and Git metadata
+.mvn/
+mvnw
+mvnw.cmd
+.gitattributes
+
+# Eclipse / STS / NetBeans
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Local runtime artifacts
+*.class
+*.log

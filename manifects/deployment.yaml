@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-webapp-deployment
+spec:
+  selector:
+    matchLabels:
+      app: springboot-webapp
+  template:
+    metadata:
+      labels:
+        app: springboot-webapp
+    spec:
+      containers:
+      - name: springboot-webapp
+        image: krishloga9318/spring-boot-web-app:releaseTag
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+        livenessProbe:
+          httpGet: /healthz
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        ports:
+        - containerPort: 8086
