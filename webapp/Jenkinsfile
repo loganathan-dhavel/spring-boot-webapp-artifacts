@@ -9,7 +9,7 @@ pipeline{
         stage('Checkout'){
             steps{
 //                git branch: 'main',
-//                    url: 'https://github.com/loganathan-dhavel/spring-boot-web-app.git',
+//                    url: 'https://github.com/loganathan-dhavel/spring-boot-webapp-artifacts.git',
 //                    credentialsId: 'github-creds'
                 sh 'echo "git clone passed"'
             }
