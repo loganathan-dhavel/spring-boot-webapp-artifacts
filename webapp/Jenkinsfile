@@ -34,7 +34,7 @@ pipeline{
 
         stage('Build Docker Image'){
             steps{
-                sh 'docker build -t krishloga9318/springboot-webapp:${BUILD_NUMBER} spring-boot-webapp-artifacts/webapp/Dockerfile'
+                sh 'docker build -t krishloga9318/springboot-webapp:${BUILD_NUMBER} -f webapp/Dockerfile webapp'
             }
         }
         stage('Push Docker Image') {
