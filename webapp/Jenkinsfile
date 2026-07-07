@@ -59,8 +59,8 @@ pipeline{
                         git config --global user.email "${GIT_EMAIL}"
 
                         sed -i "s/releaseTag/${IMAGE_TAG}/g" manifests/deployment.yaml
-                        git add manifests/
-                        git commit -m "Update deployment.yaml with new image tag ${IMAGE_TAG}"
+                        git add manifests/deployment.yaml manifests/service.yaml
+                        git diff --cached --quiet || git commit -m "Update deployment manifests with new image tag ${IMAGE_TAG}"
                         git push -f https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/${GIT_USERNAME}/${GIT_REPO_NAME}.git HEAD:main
                     '''
                 }
