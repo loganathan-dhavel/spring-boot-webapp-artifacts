@@ -62,6 +62,7 @@ pipeline{
                         git commit -m "Update deployment.yaml with new image tag ${IMAGE_TAG}"
                         git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${GIT_REPO_NAME} HEAD:main
                     '''
+                }
             }
         }
     }
