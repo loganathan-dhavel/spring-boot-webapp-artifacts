@@ -47,20 +47,21 @@ pipeline{
         }
         stage('Update k8s deployment files'){
             environment {
-                IMAGE_TAG = "${BUILD_NUMBER}"
+                GIT_USERNAME = "loganathan-dhavel"
                 GIT_REPO_NAME = "springboot-webapp-deployments"
                 GIT_EMAIL = "loganathan9318@gmail.com"
+                IMAGE_TAG = "${BUILD_NUMBER}"
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'github-new-token', variable: 'GIT_TOKEN')]) {
                     sh '''
                         git config --global user.name "${GIT_USERNAME}"
                         git config --global user.email "${GIT_EMAIL}"
 
                         sed -i "s/releaseTag/${IMAGE_TAG}/g" manifests/deployment.yaml
-                        git add manifests/*
+                        git add manifests/
                         git commit -m "Update deployment.yaml with new image tag ${IMAGE_TAG}"
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/${GIT_REPO_NAME} HEAD:main
+                        git push https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/${GIT_USERNAME}/${GIT_REPO_NAME}.git HEAD:main
                     '''
                 }
             }
