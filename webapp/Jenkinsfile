@@ -61,7 +61,7 @@ pipeline{
                         sed -i "s/releaseTag/${IMAGE_TAG}/g" manifests/deployment.yaml
                         git add manifests/
                         git commit -m "Update deployment.yaml with new image tag ${IMAGE_TAG}"
-                        git push https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/${GIT_USERNAME}/${GIT_REPO_NAME}.git HEAD:main
+                        git push -f https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/${GIT_USERNAME}/${GIT_REPO_NAME}.git HEAD:main
                     '''
                 }
             }
